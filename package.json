@@ -1,0 +1,24 @@
+{
+  "name": "kjin-promise",
+  "version": "0.0.1",
+  "description": "Just another Promise implementation",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "tsc && node test",
+    "prepack": "tsc"
+  },
+  "keywords": [],
+  "author": "Kelvin Jin (kelvinjin@google.com)",
+  "license": "ISC",
+  "devDependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kjin/promise"
+  }
+}
