@@ -100,8 +100,7 @@ export class Promise<T> {
   private rejected: DeferredValue<Error>;
 
   constructor(
-    fn: (resolve: (value: T) => void,
-    reject: (err: Error) => void) => void
+    fn: (resolve: (value: T) => void, reject: (err: Error) => void) => void
   ) {
     // Initialize deferred value storage.
     this.resolved = new DeferredValue<T>(Promise.taskQueue);
