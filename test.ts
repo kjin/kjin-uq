@@ -1,5 +1,5 @@
 const promisesAplusTests = require('promises-aplus-tests');
-const { Promise } = require('.');
+const { Promise } = require('./ah');
 
 promisesAplusTests({
   resolved: (value: any) => Promise.resolve(value),
