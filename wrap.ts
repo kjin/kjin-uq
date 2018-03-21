@@ -1,3 +1,5 @@
+import { AsyncResource } from 'async_hooks';
+
 type AsyncTaskCallback<T> = (err: Error|null, output?: T) => void;
 type AsyncTask<I, O> = (input: I, cb: AsyncTaskCallback<O>) => void;
 
@@ -14,7 +16,9 @@ export function wrapPool<I, O>(task: AsyncTask<I, O>, numWorkers: number): Async
   let numWorkersActive = 0;
   const queue: Array<() => void> = [];
   return (input: I, cb: AsyncTaskCallback<O>) => {
+    const asyncResource = new AsyncResource('PooledTask');
     const execute = () => {
+      asyncResource.emitBefore();
       numWorkersActive++;
       task(input, (err: Error|null, output?: O) => {
         numWorkersActive--;
@@ -23,6 +27,8 @@ export function wrapPool<I, O>(task: AsyncTask<I, O>, numWorkers: number): Async
         }
         cb(err, output);
       });
+      asyncResource.emitAfter();
+      asyncResource.emitDestroy();
     }
     if (numWorkersActive < numWorkers) {
       execute();
@@ -44,8 +50,12 @@ export function wrapPool<I, O>(task: AsyncTask<I, O>, numWorkers: number): Async
 export function wrapBatch<I, O>(task: AsyncTask<I, O>, queueSize: number): AsyncTask<I, O> {
   const queue: Array<() => void> = [];
   return (input: I, cb: AsyncTaskCallback<O>) => {
+    const asyncResource = new AsyncResource('BatchedTask');
     const execute = () => {
+      asyncResource.emitBefore();
       task(input, cb);
+      asyncResource.emitAfter();
+      asyncResource.emitDestroy();
     }
     queue.push(execute);
     if (queue.length === queueSize) {
