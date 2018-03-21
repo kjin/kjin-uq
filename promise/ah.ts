@@ -1,5 +1,5 @@
 import { AsyncResource } from 'async_hooks';
-import { Promise as BasePromise } from './promise';
+import { Promise as BasePromise } from '.';
 
 // Need encapsulation since we're compiling to ES5 (to avoid conflicting
 // Promise definition).
@@ -53,7 +53,7 @@ export class Promise<T> extends BasePromise<T> {
   then<S>(
     onResolve?: (value: T) => S|BasePromise<S>,
     onReject?: (err: Error) => S|BasePromise<S>
-  ): BasePromise<S>|BasePromise<T> {
+  ): BasePromise<S|T> {
     const result = super.then(
       onResolve && ((value: T) => {
         this.asyncResource.emitBefore();

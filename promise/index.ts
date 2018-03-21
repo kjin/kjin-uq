@@ -162,7 +162,7 @@ export class Promise<T> {
   then<S>(
     onResolve?: (value: T) => S|Promise<S>,
     onReject?: (err: Error) => S|Promise<S>
-  ): Promise<S>|Promise<T> {
+  ): Promise<S|T> {
     const result = new Promise<any>((resolve, reject) => {
       // Helper function to queue a callback to run when a deferred value is
       // resolved.
